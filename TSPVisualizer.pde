@@ -27,6 +27,9 @@ void setup ()
     /* set the size of the window */
     size( 540, 650 );
 
+    /* set the title of the window */
+    surface.setTitle( "TSP Visualizer" );
+
     /* establish the frame rate */
     frameRate( 100 );
 
@@ -137,15 +140,18 @@ void mouseClicked ()
     }
 }
 
-void keyPressed () 
+/**
+ * Handles the action of typing a key.
+ */
+void keyTyped () 
 {
-    /* the 'p' key was pressed */
+    /* the 'p' key was typed */
     if ( key == 'p' )
     {
         /* replay the tour animation */
         tour.animate();
     }
-    /* the 'r' key was pressed */
+    /* the 'r' key was typed */
     if ( key == 'r' )
     {
         /* animate a random tour */
