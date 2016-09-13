@@ -27,6 +27,10 @@ public class Location
 
     /* has this location been visited yet? */
     private boolean visited = false;
+
+    /* the location of the origin */
+    private float origin_pos_x;
+    private float origin_pos_y;
     /* - */
 
     /**
@@ -54,7 +58,22 @@ public class Location
         fill( loc_color );
 
         /* redraw circle */
-        ellipse( x_pos, y_pos, LOCATION_SIZE, LOCATION_SIZE );
+        ellipse( x_pos + origin_pos_x, y_pos + origin_pos_y, LOCATION_SIZE, 
+            LOCATION_SIZE );
+    }
+
+    /**
+     * Sets the position of this location's origin.
+     *
+     * @param new_origin_pos_x the x-position of this location's origin
+     * @param new_origin_pos_y the y-position of this location's origin
+     */
+    public void set_origin_pos ( float new_origin_pos_x, 
+        float new_origin_pos_y )
+    {
+        /* set the position of the origin */
+        origin_pos_x = new_origin_pos_x;
+        origin_pos_y = new_origin_pos_y;
     }
 
     /** 

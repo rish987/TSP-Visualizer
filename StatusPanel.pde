@@ -12,9 +12,6 @@ class StatusPanel
     public static final int STATUS_PANEL_WIDTH = 200;
     public static final int STATUS_PANEL_HEIGHT = 100;
 
-    /* the color of a status panel */
-    public static final int STATUS_PANEL_COLOR = 200;
-
     /* font size of text */
     public static final int TEXT_SIZE = 13;
 
@@ -27,8 +24,8 @@ class StatusPanel
 
     /* - STATUS VARIABLES - */
     /* the x- and y-position of the panel */
-    private int x_pos;
-    private int y_pos;
+    private float x_pos;
+    private float y_pos;
 
     /* the total distance traveled */
     private float total_distance = 0;
@@ -40,7 +37,7 @@ class StatusPanel
      * @param init_x_pos the initial x-position of this panel
      * @param init_y_pos the initial y-position of this panel
      */
-    public StatusPanel ( int init_x_pos, int init_y_pos )
+    public StatusPanel ( float init_x_pos, float init_y_pos )
     {
         /* set the initial position of this panel */
         x_pos = init_x_pos;
@@ -53,7 +50,7 @@ class StatusPanel
     public void update ()
     {
         /* set color */
-        fill( STATUS_PANEL_COLOR );
+        fill( Utilities.FOREGROUND_COLOR );
 
         /* draw the panel */
         rect( x_pos, y_pos, STATUS_PANEL_WIDTH, STATUS_PANEL_HEIGHT );

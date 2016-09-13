@@ -3,7 +3,7 @@
  * Author:  Rishikesh Vaishnav
  * Date:    9/11/2016
  *
- * A traveler that moves between locations and can be sent on a tour.
+ * A traveler that moves between locations.
  */
 public class Traveler
 {
@@ -16,6 +16,10 @@ public class Traveler
     /* - */
 
     /* - STATUS VARIABLES - */
+    /* the location of the origin */
+    private float origin_pos_x;
+    private float origin_pos_y;
+
     /* the x- and y-position of this traveler */
     private float x_pos;
     private float y_pos;
@@ -27,15 +31,9 @@ public class Traveler
     /* is this traveler currently traveling? */
     private boolean traveling = false;
 
-    /* is this traveler currently touring? */
-    private boolean touring = false;
-
     /* distance traveled in this trip 
      * NOTE: a trip is defined as moving from one location to another */
     private float trip_distance_traveled = 0;
-
-    /* total distance traveled  */
-    private float total_distance_traveled = 0;
 
     /* the distance, and the x- and y-distance the traveler must travel in this
      * trip */
@@ -49,16 +47,7 @@ public class Traveler
     private float y_inc;
 
     /* the speed at which the traveler is traveling, in pixels/iteration */
-    private float speed = 3;
-
-    /* locations in this traveler's tour */
-    private Location[] tour;
-
-    /* path of this traveler's tour */
-    private Path[] tour_path;
-
-    /* index of the next location to visit in the tour */
-    private int next_tour_location;
+    private float speed = 10;
     /* - */
 
     /** 
@@ -98,49 +87,17 @@ public class Traveler
     }
 
     /**
-     * Allows this traveler to go on a specified tour.
+     * Sets the position of this traveler's origin.
      *
-     * @param new_tour the tour this traveler is going on
-     * @param new_tour_path the path this traveler will "lay down" as it goes
-     * on the tour 
+     * @param new_origin_pos_x the x-position of this location's origin
+     * @param new_origin_pos_y the y-position of this location's origin
      */
-    public void tour ( Location[] new_tour, Path[] new_tour_path )
+    public void set_origin_pos ( float new_origin_pos_x, 
+        float new_origin_pos_y )
     {
-        /* reset the total distance traveled */
-        total_distance_traveled = 0;
-        
-        /* the tour is too short */
-        if ( new_tour.length <= 1 )
-        {
-            /* do not go on the tour */
-            return;
-        }
-
-        /* reset all locations on the tour to indicate that they have not been 
-         * visited */
-        for ( int new_tour_ind = 0; new_tour_ind < new_tour.length;
-             new_tour_ind++ )
-        {
-            new_tour[ new_tour_ind ].set_visited( false );
-        }
-        
-        /* this traveler is now touring  */
-        touring = true;
-
-        /* set the tour */
-        tour = new_tour;
-
-        /* set the tour path */
-        tour_path = new_tour_path;
-
-        /* set the next Location to visit */
-        next_tour_location = 1;
-
-        /* the first location has been visited */
-        tour[ 0 ].set_visited( true );
-
-        /* travel from the first location to the second */
-        travel( tour[ 0 ], tour[ 1 ] );
+        /* set the position of the origin */
+        origin_pos_x = new_origin_pos_x;
+        origin_pos_y = new_origin_pos_y;
     }
 
     /** 
@@ -148,103 +105,67 @@ public class Traveler
      */
     public void update () 
     {
-        /* the traveler is traveling */
-        if ( traveling )
+        /* the traveler has not yet traveled the full distance */
+        if ( trip_distance_traveled + speed < trip_distance )
         {
-            /* the traveler has not yet traveled the full distance */
-            if ( trip_distance_traveled + speed < trip_distance )
-            {
-                /* update the position of this traveler */
-                x_pos += x_inc * speed;
-                y_pos += y_inc * speed;
+            /* update the position of this traveler */
+            x_pos += x_inc * speed;
+            y_pos += y_inc * speed;
 
-                /* draw line from starting location to traveler */
-                line( start_loc.get_x_pos(), start_loc.get_y_pos(), 
-                    x_pos, y_pos );
+            /* draw line from starting location to traveler */
+            line( start_loc.get_x_pos() + origin_pos_x, start_loc.get_y_pos()
+                + origin_pos_y, x_pos + origin_pos_x,
+                y_pos + origin_pos_y );
 
-                /* set traveler color */
-                fill( TRAVELER_COLOR );
+            /* set traveler color */
+            fill( TRAVELER_COLOR );
 
-                /* draw the traveler */
-                ellipse( x_pos, y_pos, TRAVELER_SIZE, TRAVELER_SIZE );
+            /* draw the traveler */
+            ellipse( x_pos + origin_pos_x, y_pos + origin_pos_y, 
+                TRAVELER_SIZE, TRAVELER_SIZE );
 
-                /* this traveler has moved */
-                trip_distance_traveled += speed;
-            }
-            /* the traveler has just completed traveling the full distance */
-            else
-            {
-                /* this traveler is no longer traveling */
-                traveling = false;
-
-                /* add the distance traveled in the trip just completed
-                 * to the total distance */
-                total_distance_traveled += trip_distance;
-
-                /* reset trip distance traveled */
-                trip_distance_traveled = 0;
-            }
+            /* this traveler has moved */
+            trip_distance_traveled += speed;
         }
-        /* the traveler is not traveling, but is touring */
-        else if ( touring )
+        /* the traveler has just completed traveling the full distance */
+        else
         {
-            /* show the tour path */
-            tour_path[ next_tour_location - 1 ].set_show( true );
+            /* this traveler is no longer traveling */
+            traveling = false;
 
-            /* the tour is over */
-            if ( next_tour_location == tour.length )
-            {
-                /* end the tour */
-                touring = false;
-            }
-            /* the tour can be completed by traveling back to the first
-             * location */
-            else if ( next_tour_location == tour.length - 1 )
-            {
-                /* this location has just been visited */
-                tour[ next_tour_location ].set_visited( true );
-
-                /* indicate that the tour is over */
-                next_tour_location++;
-                
-                /* travel from this location to the first location */
-                travel( tour[ next_tour_location - 1 ], tour[ 0 ] );
-            }
-            /* the tour is not over */
-            else
-            {
-                /* this location has just been visited */
-                tour[ next_tour_location ].set_visited( true );
-
-                /* set the next location to visit */
-                next_tour_location++;
-
-                /* travel from this location to the next location */
-                travel( tour[ next_tour_location - 1 ], 
-                        tour[ next_tour_location  ] );
-            }
+            /* reset trip distance traveled */
+            trip_distance_traveled = 0;
         }
     }
 
     /**
-     * Returns the total distance this traveler has traveled in this tour.
+     * Returns whether or not this traveler is traveling.
      *
-     * @return the total distance this traveler has traveled in this tour
+     * @return is this traveler traveling?
      */
-    public float get_total_distance_traveled () 
+    public boolean is_traveling () 
     {
-        /* the traveler is currenly traveling */
-        if ( traveling )
-        {
-            /* return the distance traveled in all trips so far including the
-             * portion of this trip traveled */
-            return total_distance_traveled + trip_distance_traveled;
-        }
-        /* the traveler is not currently traveling */
-        else
-        {
-            /* return the distance traveled in all trips so far */
-            return total_distance_traveled;
-        }
+        return traveling;
+    }
+
+    /**
+     * Returns the total distance this traveler has traveled in this trip so
+     * far.
+     *
+     * @return the total distance this traveler has traveled in this trip
+     */
+    public float get_trip_distance_traveled () 
+    {
+        return trip_distance_traveled;
+    }
+
+    /**
+     * Returns the total distance this traveler must travel in this trip.
+     *
+     * @return the total distance this traveler must travel in this trip
+     */
+    public float get_trip_distance () 
+    {
+        return trip_distance;
     }
 }

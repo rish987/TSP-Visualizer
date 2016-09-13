@@ -13,6 +13,10 @@ class Path
     /* - */
 
     /* - STATUS VARIABLES - */
+    /* the location of the origin */
+    private float origin_pos_x;
+    private float origin_pos_y;
+
     /* the start and end locations of this path */
     private Location start_loc;
     private Location end_loc;
@@ -45,6 +49,20 @@ class Path
     }
 
     /**
+     * Sets the position of this path's origin.
+     *
+     * @param new_origin_pos_x the x-position of this location's origin
+     * @param new_origin_pos_y the y-position of this location's origin
+     */
+    public void set_origin_pos ( float new_origin_pos_x, 
+        float new_origin_pos_y )
+    {
+        /* set the position of the origin */
+        origin_pos_x = new_origin_pos_x;
+        origin_pos_y = new_origin_pos_y;
+    }
+     
+    /**
      * Redraws this path 
      */
     public void update () 
@@ -56,8 +74,10 @@ class Path
             stroke( PATH_COLOR );
 
             /* draw the path */
-            line( start_loc.get_x_pos(), start_loc.get_y_pos(), 
-                end_loc.get_x_pos(), end_loc.get_y_pos() );
+            line( start_loc.get_x_pos() + origin_pos_x, 
+                start_loc.get_y_pos() + origin_pos_y, 
+                end_loc.get_x_pos() + origin_pos_x, 
+                end_loc.get_y_pos() + origin_pos_y );
 
             /* set stroke color back to default (black) */
             stroke( 0 );

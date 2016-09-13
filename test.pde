@@ -1,149 +1,61 @@
-final int WIDTH = 500;
-final int HEIGHT = 500;
-int num_locs = 10;
+/* offset of components from edge of screen */
+final int OFFSET = 10;
 
-Location[] test_tour;
+/* number of locations in the tour */
+int num_locs = 300;
 
-Path[] test_path;
+/* panel on which to display information */
+StatusPanel panel;
 
-StatusPanel test_panel = new StatusPanel( WIDTH - StatusPanel.STATUS_PANEL_WIDTH, HEIGHT );
+/* locations to use for a tour */
+Location[] loc_list;
 
-Traveler test_trav = new Traveler();
+/* tour to use */
+Tour tour;
 
 void setup () 
 {
-    size( 510, 610 );
-    background( 240 );
+    frameRate( 10000 );
+    size( 540, 650 );
 
-    test_tour = new Location[ num_locs ];
+    panel = new StatusPanel( 
+        width - ( StatusPanel.STATUS_PANEL_WIDTH + Utilities.OFFSET ),
+        height - ( StatusPanel.STATUS_PANEL_HEIGHT + Utilities.OFFSET ) );
 
-    for ( int i = 0; i < test_tour.length; i++ )
+    loc_list = new Location[ num_locs ];
+
+    for ( int i = 0; i < loc_list.length; i++ )
     {
-        test_tour[ i ] = new Location( random( WIDTH ), random( HEIGHT ) );
+        loc_list[ i ] = new Location(
+             random( Tour.TOUR_WIDTH - ( 2 * Tour.TOUR_OFFSET ) ),
+             random( Tour.TOUR_HEIGHT - ( 2 * Tour.TOUR_OFFSET ) ) );
     }
 
-    test_tour = get_greedy_tour( test_tour, 0 );
+    /*  */
+    tour = new Tour( Utilities.get_greedy_tour( loc_list, 0 ), 
+        Utilities.OFFSET, Utilities.OFFSET );
 
-    test_path = get_path( test_tour );
-
-    test_trav.tour( test_tour, test_path );
+    tour.animate();
 }
 
 void draw ()
 {
-    background( 230 );
+    background( Utilities.BACKGROUND_COLOR );
 
-    test_trav.update();
+    /* update the tour */
+    tour.update();
+     
+    /* panel.set_total_distance */
+    panel.set_total_distance( tour.get_total_distance_traveled() );
 
-    for( int i = 0; i < test_tour.length; i++ )
-    {
-        test_tour[ i ].update();
-    }
-
-    for( int i = 0; i < test_path.length; i++ )
-    {
-        test_path[ i ].update();
-    }
-
-    /* set the total distance traveled in the test panel */
-    test_panel.set_total_distance( test_trav.get_total_distance_traveled() );
-
-    /* draw the test panel */
-    test_panel.update();
-    
-    delay( 1 );
+    /* update the test panel */
+    panel.update();
 }
 
-// get a tour path from a tour
-Path[] get_path ( Location[] tour )
-{
-    // path to return
-    Path[] tour_path = new Path[ tour.length ];
-
-    // the current location in the tour
-    int tour_loc = 0;
-    // set the paths
-    for( tour_loc = 0; tour_loc < tour.length - 1; tour_loc++ )
-    {
-        // each path goes from the current location to the next
-        tour_path[ tour_loc ] = new Path( tour[ tour_loc ], tour[ tour_loc + 1 ] );
-    }
-
-    // set last path
-    tour_path[ tour_loc ] = new Path( tour[ tour_loc ], tour[ 0 ] );
-
-    // return tour path
-    return tour_path;
-}
-
-// returns a tour that has been optimized for TSP using a greedy algorithm,
-// starting at a specified locacation
-// unopt_tour: the unoptimized tour
-// start_loc: the location in the tour at which to start from
-Location[] get_greedy_tour ( Location[] unopt_tour, int start_loc )
-{
-    // to store the optimized tour
-    Location[] opt_tour = new Location[ unopt_tour.length ];
-
-    // to store information regarding whether or not each node has been visited
-    boolean[] visited = new boolean[ unopt_tour.length ];
-
-    // the first Location is the specified starting location
-    opt_tour[ 0 ] = unopt_tour[ start_loc ];
-
-    // the first location has been visited
-    visited[ start_loc ] = true;
-
-    // construct the optimized tour
-    for ( int next_loc = 1; next_loc < opt_tour.length; next_loc++ )
-    {
-        // to store the index of nearest, unvisited location
-        int nearest_unvisited_loc = 0;
-
-        // distance to nearest, unvisited location
-        float min_dist = Float.MAX_VALUE;
-
-        // check each location to find the next nearest unvisited location
-        for ( int check_loc = 0; check_loc < unopt_tour.length; check_loc++ )
-        {
-            // this location has not been visited yet and the distance to is is
-            // less than the distance to nearest_unvisited_loc
-            if ( ( !visited[ check_loc ] ) 
-                && ( get_distance_between( opt_tour[ next_loc - 1 ], 
-                unopt_tour[ check_loc ] ) < min_dist ) )
-            {
-                // this location is the new nearest_unvisited_loc
-                nearest_unvisited_loc = check_loc;
-                
-                // reset the minimum distance
-                min_dist = get_distance_between( opt_tour[ next_loc - 1 ], 
-                    unopt_tour[ check_loc ] );
-            }
-        }
-
-        // visit the nearest, unvisited location
-        visited[ nearest_unvisited_loc ] = true;
-
-        // this location is the next location in the tour
-        opt_tour[ next_loc ] = unopt_tour[ nearest_unvisited_loc ];
-    }
-
-    return opt_tour;
-}
-
-// gets the best greedy tour (starting from a location that minimizes distance
-// travelled) TODO
-
-// get the distance between two locations
-float get_distance_between( Location loc1, Location loc2 )
-{
-    // return distance between them
-    return sqrt( pow( loc2.get_x_pos() - loc1.get_x_pos(), 2 ) + pow( loc2.get_y_pos() - loc1.get_y_pos(), 2 ) );
-}
-
+/* TODO
 void mouseClicked () 
 {
-    // check every location
+    /* check every location
     for ( int i = 0; i < test_tour.length; i++ )
     {
         // this location was clicked
@@ -154,6 +66,9 @@ void mouseClicked ()
             test_path = get_path( test_tour );
 
             test_trav.tour( test_tour, test_path );
+
+            return;
         }
     }
 }
+*/
