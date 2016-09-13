@@ -45,7 +45,21 @@ class Tour
 
     /* total distance traveled in this tour so far */
     private float total_distance_traveled = 0;
+
+    /* total distance in this tour */
+    private float total_distance;
     /* - */
+
+    /**
+     * Sets up this tour using the given ordered locations, at the position 
+     * (0, 0).
+     *
+     * @param init_tour_locs the the ordered locations in this tour
+     */
+    public Tour ( Location[] init_tour_locs )
+    {
+        this( init_tour_locs, 0, 0 );
+    }
 
     /**
      * Sets up this tour using the given ordered locations, in the given
@@ -75,8 +89,12 @@ class Tour
         /* set the origin of each location */
         for ( int loc_ind = 0; loc_ind < tour_locs.length; loc_ind++ )
         {
+            /* set origin */
             tour_locs[ loc_ind ].set_origin_pos( origin_pos_x, origin_pos_y );
         }
+
+        /* get the total distance of this tour */
+        total_distance = Utilities.get_total_distance( tour_locs );
          
         /* set the origin of each path */
         for ( int path_ind = 0; path_ind < tour_path.length; path_ind++ ) {
@@ -95,11 +113,12 @@ class Tour
         /* reset the total distance traveled */
         total_distance_traveled = 0;
 
-        /* set all locations to be unvisited */
+        /* set all locations to be unvisited, and all paths to be invisible */
         for ( int tour_locs_ind = 0; tour_locs_ind < tour_locs.length;
              tour_locs_ind++ )
         {
             tour_locs[ tour_locs_ind ].set_visited( false );
+            tour_path[ tour_locs_ind ].set_show( false );
         }
 
         /* start from the first location */
@@ -242,5 +261,26 @@ class Tour
 
         /* return tour path */
         return tour_path;
+    }
+
+    /**
+     * Returns the location list.
+     *
+     * @return the location list
+     */
+    public Location[] get_location_list () 
+    {
+        /* return the location list */
+        return tour_locs;
+    }
+
+    /**
+     * Returns the total distance of this tour.
+     *
+     * @return the total distance of this tour
+     */
+    public float get_total_distance ()
+    {
+        return total_distance;
     }
 }

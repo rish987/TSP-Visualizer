@@ -13,6 +13,9 @@ public class Location
     private static final int UNVISITED_COLOR = 200;
     private static final int VISITED_COLOR = 100;
 
+    /* RGB color of ideal starting location for a greedy tour */
+    private final int[] IDEAL_COLOR = { 90, 190, 110 };
+
     /* size of locations */
     public static final int LOCATION_SIZE = 10;
     /* - */
@@ -31,6 +34,9 @@ public class Location
     /* the location of the origin */
     private float origin_pos_x;
     private float origin_pos_y;
+
+    /* is this an ideal starting location for the greedy algorithm? */
+    boolean ideal = false;
     /* - */
 
     /**
@@ -54,8 +60,18 @@ public class Location
      */
     public void update () 
     {
-        /* reset color */
-        fill( loc_color );
+        /* this location is ideal */ 
+        if ( ideal )
+        {
+            /* reset the color of the location to indicate that it is ideal */
+            fill( IDEAL_COLOR[ 0 ], IDEAL_COLOR[ 1 ], IDEAL_COLOR[ 2 ] );
+        }
+        /* this location is not ideal */ 
+        else
+        {
+            /* reset color */
+            fill( loc_color );
+        }
 
         /* redraw circle */
         ellipse( x_pos + origin_pos_x, y_pos + origin_pos_y, LOCATION_SIZE, 
@@ -83,23 +99,39 @@ public class Location
      */
     public void set_visited ( boolean new_visited )
     {
-        /* reset value of "visited" */
-        visited = new_visited;
-        
-        /* this location has been visited */
-        if ( visited )
+        /* this is not an ideal starting location for the greedy algorithm */
+        if ( !ideal )
         {
-            /* reset the color of the node to indicate that is has been 
-             * visited */
-            loc_color = VISITED_COLOR;
+            /* reset value of "visited" */
+            visited = new_visited;
+
+            /* this location has been visited */
+            if ( visited )
+            {
+                /* reset the color of the node to indicate that is has been 
+                 * visited */
+                loc_color = VISITED_COLOR;
+            }
+            /* this location has not been visited */
+            else
+            {
+                /* reset the color of the node to indicate that is has not been 
+                 * visited */
+                loc_color = UNVISITED_COLOR;
+            }
         }
-        /* this location has not been visited */
-        else
-        {
-            /* reset the color of the node to indicate that is has not been 
-             * visited */
-            loc_color = UNVISITED_COLOR;
-        }
+    }
+
+    /**
+     * Sets whether or not this is an ideal starting location for the greedy
+     * algorithm.
+     *
+     * @param new_ideal is this an ideal starting location for the greedy
+     * algorithm?
+     */
+    public void set_ideal ( boolean new_ideal )
+    {
+        ideal = new_ideal;
     }
 
     /**

@@ -47,7 +47,7 @@ public class Traveler
     private float y_inc;
 
     /* the speed at which the traveler is traveling, in pixels/iteration */
-    private float speed = 1;
+    private float speed = 5;
     /* - */
 
     /** 
