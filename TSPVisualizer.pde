@@ -1,20 +1,34 @@
-/* TODO clean up and rename TODO */
-/* number of locations in the tour */
+/* 
+ * File:    TSPVisualizer.pde
+ * Author:  Rishikesh Vaishnav
+ * Date:    9/11/2016
+ *
+ * A visualizer of various methods that can be used to find optimal solutions
+ * to the Traveling Salesman Problem.
+ */
+
+/* number of locations in the sample tour */
 int num_locs = 10;
+
+/* locations to use for the sample tour */
+Location[] loc_list;
+
+/* tour to use for the sample tour */
+Tour tour;
 
 /* panel on which to display information */
 StatusPanel panel;
 
-/* locations to use for a tour */
-Location[] loc_list;
-
-/* tour to use */
-Tour tour;
-
+/**
+ * Sets up the program by creating the window and starting a tour.
+ */
 void setup () 
 {
-    frameRate( 100 );
+    /* set the size of the window */
     size( 540, 650 );
+
+    /* establish the frame rate */
+    frameRate( 100 );
 
     /* create the status panel */
     panel = new StatusPanel( 
@@ -76,21 +90,27 @@ Location[] get_random_locs ( int loc_count, float width, float height )
     return rand_locs;
 }
 
+/**
+ * Draws the components of the visualizer, updating them as needed.
+ */
 void draw ()
 {
+    /* draw the background */
     background( Utilities.BACKGROUND_COLOR );
 
     /* update the tour */
     tour.update();
      
-    /* panel.set_total_distance */
+    /* update the total distance on the panel */
     panel.set_total_distance( tour.get_total_distance_traveled() );
 
-    /* update the test panel */
+    /* update the panel */
     panel.update();
 }
 
-
+/**
+ * Handles the action of clicking the mouse within the window.
+ */
 void mouseClicked () 
 {
     /* check every location */
@@ -98,16 +118,20 @@ void mouseClicked ()
     {
         /* this location was clicked */
         if ( Utilities.get_distance_between( 
-            new Location( mouseX - Utilities.OFFSET * 2, mouseY - Utilities.OFFSET * 2 ),
+            new Location( mouseX - Utilities.OFFSET * 2, 
+            mouseY - Utilities.OFFSET * 2 ),
             tour.get_location_list()[ i ] ) < ( Location.LOCATION_SIZE / 2 ) )
         {
-
+            /* create a tour starting at this location */
             tour = new Tour( Utilities.get_greedy_tour( 
                 tour.get_location_list(), i ), Utilities.OFFSET,
                  Utilities.OFFSET );
 
+            /* animate the tour */
             tour.animate();
 
+            /* exit so that any overlapping locations that were also clicked do
+             * not animate */
             return;
         }
     }
