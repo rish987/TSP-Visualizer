@@ -2,7 +2,7 @@
 final int OFFSET = 10;
 
 /* number of locations in the tour */
-int num_locs = 300;
+int num_locs = 100;
 
 /* panel on which to display information */
 StatusPanel panel;
@@ -15,7 +15,7 @@ Tour tour;
 
 void setup () 
 {
-    frameRate( 10000 );
+    frameRate( 100 );
     size( 540, 650 );
 
     panel = new StatusPanel( 

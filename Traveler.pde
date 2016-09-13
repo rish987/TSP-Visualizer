@@ -3,7 +3,7 @@
  * Author:  Rishikesh Vaishnav
  * Date:    9/11/2016
  *
- * A traveler that moves between locations.
+ * A traveler that can be animated to move between locations.
  */
 public class Traveler
 {
@@ -47,7 +47,7 @@ public class Traveler
     private float y_inc;
 
     /* the speed at which the traveler is traveling, in pixels/iteration */
-    private float speed = 10;
+    private float speed = 1;
     /* - */
 
     /** 

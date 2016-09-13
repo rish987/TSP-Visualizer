@@ -1,12 +1,19 @@
 /* 
- * File:    UtilityMethods.pde
+ * File:    Utilities.pde
  * Author:  Rishikesh Vaishnav
  * Date:    9/12/2016
  *
  * Contains various static utility methods.
  */
-static class UtilityMethods
+static class Utilities
 {
+    /* offset of components within the window */
+    public static final float OFFSET = 10;
+
+    /* background and foreground colors */
+    public static final int BACKGROUND_COLOR = 230;
+    public static final int FOREGROUND_COLOR = 240;
+
     /** 
      * Returns a tour that has been optimized for TSP using a greedy algorithm,
      * starting at a specified location.

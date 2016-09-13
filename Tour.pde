@@ -3,7 +3,7 @@
  * Author:  Rishikesh Vaishnav
  * Date:    9/12/2016
  *
- * TODO 
+ * A tour over a set of locations that can be animated.
  */
 class Tour
 {
