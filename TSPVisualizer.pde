@@ -25,7 +25,7 @@ StatusPanel panel;
 void setup () 
 {
     /* set the size of the window */
-    size( 540, 650 );
+    size( 540, 700 );
 
     /* set the title of the window */
     surface.setTitle( "TSP Visualizer" );

@@ -1,0 +1,24 @@
+File:   README
+Date:   9/14/2016
+Author: Rishikesh Vaishnav
+
+DESCRIPTION:
+
+    This program can be used to visualize various methods that can be used to
+    find optimized solutions to the TSP. The controls are as follows:
+    - press 'p' to replay this tour
+    - press 'r' to play a new, randomized tour
+    - click on a location to start a tour from that location
+
+    The current supported algorithms are:
+    - greedy algorithm
+
+HOW TO RUN:
+
+    To run this program, you must:
+    1. Download and install Processing (https://processing.org/download/).
+    2. Save the files into a folder called "TSPVisualizer".
+    3. Run Processing.
+    4. In Processing, go to File->Open, and open the file "TSPVisualizer.pde" 
+    inside of the folder "TSPVisualizer".
+    5. Run the program.
