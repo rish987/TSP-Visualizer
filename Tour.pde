@@ -15,6 +15,9 @@ class Tour
     /* the offset of the components of the tour from the edges of the tour's
      * bounding box */
     private static final float TOUR_OFFSET = 10;
+
+    /* minimum number of locations this tour must have to animate */
+    private static final int MIN_LOCS = 2;
     /* - */
 
     /* - PROPERTY VARIABLES - */
@@ -113,6 +116,16 @@ class Tour
      */
     public void animate () 
     {
+        /* reset rank display */
+        set_show_rank( get_show_rank() );
+
+        /* this tour cannot be animated if there are too few locations */
+        if ( tour_locs.length < MIN_LOCS )
+        {
+            /* do not animate */
+            return;
+        }
+
         /* reset the total distance traveled */
         total_distance_traveled = 0;
 
@@ -288,8 +301,12 @@ class Tour
                  tour[ tour_loc + 1 ] );
         }
 
-        /* set last path */
-        tour_path[ tour_loc ] = new Path( tour[ tour_loc ], tour[ 0 ] );
+        /* there are locations in the tour */
+        if ( tour.length != 0 )
+        {
+            /* set last path */
+            tour_path[ tour_loc ] = new Path( tour[ tour_loc ], tour[ 0 ] );
+        }
 
         /* return tour path */
         return tour_path;
@@ -314,5 +331,37 @@ class Tour
     public float get_total_distance ()
     {
         return total_distance;
+    }
+
+    /**
+     * Returns the x-position of the left edge of the locations in this tour.
+     */
+    public float get_left_edge ()
+    {
+        return x_pos + Utilities.OFFSET;
+    }
+
+    /**
+     * Returns the x-position of the right edge of the locations in this tour.
+     */
+    public float get_right_edge ()
+    {
+        return x_pos + TOUR_WIDTH - Utilities.OFFSET;
+    }
+
+    /**
+     * Returns the y-position of the top edge of the locations in this tour.
+     */
+    public float get_top_edge ()
+    {
+        return y_pos + Utilities.OFFSET;
+    }
+
+    /**
+     * Returns the y-position of the bottom edge of the locations in this tour.
+     */
+    public float get_bottom_edge ()
+    {
+        return y_pos + TOUR_HEIGHT - Utilities.OFFSET;
     }
 }

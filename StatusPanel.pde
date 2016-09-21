@@ -32,7 +32,8 @@ class StatusPanel
         "Notes:"
         + "\n- all tours optimized using greedy algorithm"
         + "\n- controls: p - replay; r - play new, randomized tour; a - "
-        + "toggle rank display mode;"
+        + "toggle rank display mode; d - delete location under cursor; "
+        + "c - delete all locations; l - place location under cursor"
         + "\n- click on a location to start a tour from that location"
         + "\n- green location(s): ideal starting location(s) for the greedy algorithm";
     /* - */

@@ -195,6 +195,9 @@ static class Utilities
             /* set the rank of this location */
             locs[ locs_ind ].set_rank( ranks[ locs_ind ] );
 
+            /* this location is not ideal by default */
+            locs[ locs_ind ].set_ideal( false );
+
             /* ideal locations should be colored and this is an ideal location */
             if ( color_ideal && ranks[ locs_ind ] == 1 )
             {
