@@ -12,9 +12,6 @@ class StatusPanel
     public static final float STATUS_PANEL_WIDTH = Tour.TOUR_WIDTH;
     public static final float STATUS_PANEL_HEIGHT = 150;
 
-    /* font size of text */
-    public static final int TEXT_SIZE = 13;
-
     /* offset of text from edges of panel */
     public static final int TEXT_OFFSET = 5;
 
@@ -32,12 +29,12 @@ class StatusPanel
 
     /* instructional notes to be printed on the panel */
     private String notes = 
-        "- all tours are optimized using the greedy algorithm"
-        + "\n- press 'p' to replay this tour"
-        + "\n- press 'r' to play a new, randomized tour"
+        "Notes:"
+        + "\n- all tours optimized using greedy algorithm"
+        + "\n- controls: p - replay; r - play new, randomized tour; a - "
+        + "toggle rank display mode;"
         + "\n- click on a location to start a tour from that location"
-        + "\n- the green location is the ideal starting location for the "
-        + "greedy algorithm";
+        + "\n- green location(s): ideal starting location(s) for the greedy algorithm";
     /* - */
 
     /** 
@@ -66,7 +63,7 @@ class StatusPanel
 
         /* set text color and size */
         fill( TEXT_COLOR );
-        textSize( TEXT_SIZE );
+        textSize( Utilities.TEXT_SIZE );
 
         /* draw text */
         text( "Distance travelled: \n" + total_distance + "\n" + notes,

@@ -13,6 +13,11 @@ int num_locs = 10;
 /* locations to use for the sample tour */
 Location[] loc_list;
 
+/* rank of each location in loc_list
+ * NOTE: parallel to loc_list */
+int[] rankings;
+
+
 /* tour to use for the sample tour */
 Tour tour;
 
@@ -52,12 +57,14 @@ void animate_random_tour ()
         Tour.TOUR_WIDTH - 2 * Tour.TOUR_OFFSET,
         Tour.TOUR_HEIGHT - 2 * Tour.TOUR_OFFSET );
 
-    /* color the ideal starting location for the greedy algorithm */
-    loc_list[ Utilities.get_best_greedy_tour_ind( loc_list ) ].set_ideal( 
-        true );
+    /* set the rank of each location */
+    Utilities.set_ranks( loc_list, true );
+
+    /* find the best greedy tour using loc_list TODO implement ranks */
+    Utilities.find_best_greedy_tour( loc_list );
 
     /* create the tour */
-    tour = new Tour( Utilities.get_best_greedy_tour( loc_list ), 
+    tour = new Tour( Utilities.get_best_greedy_tour(), 
         Utilities.OFFSET, Utilities.OFFSET );
 
     /* animate the tour */
@@ -157,5 +164,10 @@ void keyTyped ()
         /* animate a random tour */
         animate_random_tour();
     }
+    /* the 'a' key was typed */
+    if ( key == 'a' )
+    {
+        /* toggle whether or not rankings are being shown */
+        tour.set_show_rank( !tour.get_show_rank() );
+    }
 }
-

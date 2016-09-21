@@ -48,6 +48,9 @@ class Tour
 
     /* total distance in this tour */
     private float total_distance;
+
+    /* should each location should be displayed as a ranking? */
+    private boolean show_rank = false;
     /* - */
 
     /**
@@ -233,6 +236,35 @@ class Tour
             /* return the distance traveled in all trips so far */
             return total_distance_traveled;
         }
+    }
+
+    /**
+     * Sets whether or not each each location should be displayed as a ranking.
+     *
+     * @param new_show_rank should each location should be displayed as a
+     * ranking?
+     */
+    public void set_show_rank ( boolean new_show_rank )
+    {
+        /* reset show_rank */
+        show_rank = new_show_rank;
+        /* go through each location */
+        for ( int loc_ind = 0; loc_ind < tour_locs.length; loc_ind++ )
+        {
+            /* set whether or not this location should be displayed as a
+             * ranking */
+            tour_locs[ loc_ind ].set_show_rank( show_rank );
+        }
+    }
+
+    /**
+     * Returns whether or not each each location should be displayed as a ranking.
+     *
+     * @return should each location should be displayed as a ranking?
+     */
+    public boolean get_show_rank ()
+    {
+        return show_rank;
     }
 
     /**

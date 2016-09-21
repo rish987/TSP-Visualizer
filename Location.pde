@@ -17,7 +17,13 @@ public class Location
     private final int[] IDEAL_COLOR = { 90, 190, 110 };
 
     /* size of locations */
-    public static final int LOCATION_SIZE = 10;
+    public static final float LOCATION_SIZE = 10;
+
+    /* magic ratio that helps center the y-position of ranking text */
+    public static final float MAGIC_RATIO = 4.0 / 5.0;
+
+    /* multiplier for text box */
+    public static final int MULTIPLIER = 10;
     /* - */
 
     /* - STATUS VARIABLES - */
@@ -36,7 +42,13 @@ public class Location
     private float origin_pos_y;
 
     /* is this an ideal starting location for the greedy algorithm? */
-    boolean ideal = false;
+    private boolean ideal = false;
+
+    /* the rank of this location */
+    private int rank;
+
+    /* should the rank be showing insetead of the circle? */
+    private boolean show_rank = false;
     /* - */
 
     /**
@@ -44,6 +56,7 @@ public class Location
      *
      * @param init_x_pos the x-position of this location
      * @param init_y_pos the y-position of this location
+     *
      */
     public Location ( float init_x_pos, float init_y_pos )
     {
@@ -72,10 +85,25 @@ public class Location
             /* reset color */
             fill( loc_color );
         }
+        
+        /* the rank should be shown */
+        if ( show_rank )
+        {
+            /* set text size */
+            textSize( Utilities.TEXT_SIZE );
 
-        /* redraw circle */
-        ellipse( x_pos + origin_pos_x, y_pos + origin_pos_y, LOCATION_SIZE, 
-            LOCATION_SIZE );
+            /* show the text that dispays rank TODO */
+            text( "" + rank, x_pos + origin_pos_x - LOCATION_SIZE / 2, y_pos
+                    + origin_pos_y - LOCATION_SIZE * MAGIC_RATIO, 
+                    LOCATION_SIZE * MULTIPLIER, LOCATION_SIZE * MULTIPLIER );
+        }
+        /* the location itself should be shown */
+        else
+        {
+            /* redraw circle */
+            ellipse( x_pos + origin_pos_x, y_pos + origin_pos_y, LOCATION_SIZE, 
+                LOCATION_SIZE );
+        }
     }
 
     /**
@@ -132,6 +160,27 @@ public class Location
     public void set_ideal ( boolean new_ideal )
     {
         ideal = new_ideal;
+    }
+
+    /**
+     * Sets the rank of this location
+     *
+     * @param new_rank the rank of this location
+     */
+    public void set_rank ( int new_rank )
+    {
+        rank = new_rank;
+    }
+
+    /**
+     * Sets whether or not this location should be displayed as a ranking.
+     *
+     * @param new_show_rank should this location should be displayed as a
+     * ranking?
+     */
+    public void set_show_rank ( boolean new_show_rank )
+    {
+        show_rank = new_show_rank;
     }
 
     /**

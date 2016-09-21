@@ -3,7 +3,7 @@
  * Author:  Rishikesh Vaishnav
  * Date:    9/12/2016
  *
- * Contains various static utility methods.
+ * Contains various static utility methods and constants.
  */
 static class Utilities
 {
@@ -13,6 +13,17 @@ static class Utilities
     /* background and foreground colors */
     public static final int BACKGROUND_COLOR = 230;
     public static final int FOREGROUND_COLOR = 240;
+
+    /* font size of text */
+    public static final int TEXT_SIZE = 11;
+
+    /* the optimized tour */
+    public static Location[] opt_tour;
+
+
+    /* index of the ideal starting location of a greedy tour */
+    public static int min_ind = 0;
+
 
     /** 
      * Returns a tour that has been optimized for TSP using a greedy algorithm,
@@ -81,40 +92,18 @@ static class Utilities
     }
 
     /** 
-     * Returns a tour that has been optimized for TSP using a greedy algorithm,
+     * Finds a tour that has been optimized for TSP using a greedy algorithm,
      * starting at a location that minimizes the total distance traveled.
      *
      * @param unopt_tour the unoptimized tour
-     * @param label_ideal should the ideal location be labeled as ideal?
-     *
-     * @return the optimized tour
      */
-    public static Location[] get_best_greedy_tour ( Location[] unopt_tour )
-    {
-        /* to store the optimized tour */
-        Location[] opt_tour = get_greedy_tour( 
-            unopt_tour, get_best_greedy_tour_ind( unopt_tour ) );
-
-        /* return the optimized tour */
-        return opt_tour;
-    }
-
-    /** 
-     * Returns the index of the starting location in a tour that has been
-     * optimized for TSP using a greedy algorithm, starting at a location that
-     * minimizes the total distance traveled.
-     *
-     * @param unopt_tour the unoptimized tour
-     *
-     * @return the index of the starting location of the optimized tour
-     */
-    public static int get_best_greedy_tour_ind ( Location[] unopt_tour )
+    public static void find_best_greedy_tour ( Location[] unopt_tour )
     {
         /* the minimum total distance achieved so far */
         float min_dist = Float.MAX_VALUE;
 
-        /* the index of the ideal starting location in unopt_tour */
-        int min_ind = 0;
+        /* to store the optimized tour */
+        opt_tour = new Location[ unopt_tour.length ];
 
         /* iterate through each location in unopt_tour */
         for ( int unopt_ind = 0; unopt_ind < unopt_tour.length; unopt_ind++ )
@@ -131,9 +120,111 @@ static class Utilities
                 /* this is the new min_dist */
                 min_dist = this_opt_dist;
                 min_ind = unopt_ind;
+
+                /* this is the new opt_tour */
+                opt_tour = this_opt;
+            }
+        }
+    }
+
+    /**
+     * Returns an array containing the rank of each location in a given set of
+     * locations, with regards to the length of the greedy algorithm as
+     * initialized from that location.
+     *
+     * @param locs the locations to rank
+     *
+     * @return an array parallel to locs that contains the rank of each
+     * locatino in locs
+     */
+    public static int[] get_rank ( Location[] locs )
+    {
+        /* to store the ranks */
+        int[] ranks = new int[ locs.length ];
+
+        /* to store the lengths of the greedy tours starting from each location
+         * NOTE: parallel to locs */
+        float[] lengths = new float[ locs.length ];
+
+        /* go through each location */
+        for ( int locs_ind = 0; locs_ind < locs.length; locs_ind++ )
+        {
+            /* store the length of the greedy tour starting from this location */
+            lengths[ locs_ind ] = get_total_distance( get_greedy_tour( locs, locs_ind ) );
+        }
+
+        /* go through each location */
+        for ( int locs_ind = 0; locs_ind < locs.length; locs_ind++ )
+        {
+            /* this rank is initially 1 */
+            ranks[ locs_ind ] = 1;
+
+            /* go through each location again */
+            for ( int sub_locs_ind = 0; sub_locs_ind < locs.length; sub_locs_ind++ )
+            {
+                /* this location's length is less than the length of the
+                 * location that is being ranked and the two locations are not
+                 * the same */
+                if ( ( locs_ind != sub_locs_ind )
+                    && ( lengths[ locs_ind ] > lengths[ sub_locs_ind ] ) )
+                {
+                    /* the rank increases by 1 */
+                    ranks[ locs_ind ]++;
+                }
             }
         }
 
+        /* return the ranked locations */
+        return ranks;
+    }
+
+    /**
+     * Sets the ranks of a given set of locations.
+     *
+     * @param locs the locations whose ranks will be set
+     * @param color_ideal should ideal locations be colored?
+     */
+    public static void set_ranks ( Location[] locs, boolean color_ideal )
+    {
+        /* to store the rank of each location */
+        int[] ranks = get_rank( locs );
+
+        /* go through the locations in locs */
+        for ( int locs_ind = 0; locs_ind < locs.length; locs_ind++ )
+        {
+            /* set the rank of this location */
+            locs[ locs_ind ].set_rank( ranks[ locs_ind ] );
+
+            /* ideal locations should be colored and this is an ideal location */
+            if ( color_ideal && ranks[ locs_ind ] == 1 )
+            {
+                /* color the ideal starting location for the greedy algorithm */
+                locs[ locs_ind ].set_ideal( true );
+            }
+        }
+    }
+
+    /** 
+     * Returns a tour that has been optimized for TSP using a greedy algorithm,
+     * starting at a location that minimizes the total distance traveled.
+     *
+     * @return the optimized tour
+     */
+    public static Location[] get_best_greedy_tour ()
+    {
+        /* return the optimized tour */
+        return opt_tour;
+    }
+
+    /** 
+     * Returns the index of the starting location in a tour that has been
+     * optimized for TSP using a greedy algorithm, starting at a location that
+     * minimizes the total distance traveled.
+     *
+     * @return the index of the starting location of the optimized tour
+     */
+    public static int get_best_greedy_tour_ind ()
+    {
         /* return the index */
         return min_ind;
     }
