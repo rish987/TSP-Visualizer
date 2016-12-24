@@ -4,7 +4,7 @@ Author: Rishikesh Vaishnav
 
 DESCRIPTION:
 
-    This program can be used to visualize various methods that can be used to
+    This program can be used to visualize The greedy algorihm to
     find optimized solutions to the TSP. The controls are as follows:
         p - replay
         r - play new, randomized tour
@@ -15,9 +15,6 @@ DESCRIPTION:
         - click on a location to start a tour from that location
 
     Green location(s): ideal starting location(s) for the greedy algorithm.
-
-    The current supported algorithms are:
-    - greedy algorithm
 
 HOW TO RUN:
 
@@ -33,6 +30,6 @@ HOW TO RUN:
     1. Go to:
     https://drive.google.com/open?id=0Bxgba8GLRorCeVREZjBBVHBsSGc
     2. Download the .zip folder that contains the application for your 
-    operating system
-    3. Decompress the files 
+    operating system.
+    3. Decompress the files.
     4. Run the program "TSPVisualizer".
